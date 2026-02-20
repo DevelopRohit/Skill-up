@@ -1,43 +1,32 @@
+import { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import { db } from "../firebase";
 import styles from "./PopularCourses.module.css";
 
 const PopularCourses = () => {
+  const [courses, setCourses] = useState([]);
   const navigate = useNavigate();
 
-  const courses = [
-    {
-      id: "fullstack",
-      title: "Full Stack Web Development",
-      img: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
-      level: "Beginner to Advanced",
-      duration: "6 Months",
-      tag: "🔥 Trending",
-    },
-    {
-      id: "datascience",
-      title: "Data Science & Machine Learning",
-      img: "https://images.unsplash.com/photo-1555949963-aa79dcee981c",
-      level: "Intermediate",
-      duration: "5 Months",
-      tag: "⭐ Popular",
-    },
-    {
-      id: "uiux",
-      title: "UI / UX Design",
-      img: "https://images.unsplash.com/photo-1559028012-481c04fa702d",
-      level: "Beginner",
-      duration: "3 Months",
-      tag: "🎨 Design",
-    },
-    {
-      id: "cyber",
-      title: "Cyber Security Essentials",
-      img: "https://images.unsplash.com/photo-1510511459019-5dda7724fd87",
-      level: "Intermediate",
-      duration: "4 Months",
-      tag: "🔐 High Demand",
-    },
-  ];
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, "courses"));
+
+        const list = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        // 🔥 Only show first 4 courses as "Popular"
+        setCourses(list.slice(0, 4));
+      } catch (error) {
+        console.error("Error fetching popular courses:", error);
+      }
+    };
+
+    fetchCourses();
+  }, []);
 
   return (
     <section className={styles.section}>
@@ -49,13 +38,11 @@ const PopularCourses = () => {
       <div className={styles.grid}>
         {courses.map((course) => (
           <div className={styles.card} key={course.id}>
-            {/* Image */}
             <div className={styles.imageBox}>
-              <img src={course.img} alt={course.title} />
-              <span className={styles.tag}>{course.tag}</span>
+              <img src={course.image} alt={course.title} />
+              <span className={styles.tag}>🔥 Trending</span>
             </div>
 
-            {/* Content */}
             <div className={styles.content}>
               <h3>{course.title}</h3>
 
@@ -66,7 +53,7 @@ const PopularCourses = () => {
 
               <button
                 className={styles.btn}
-                onClick={() => navigate(`/course/${course.id}`)}
+                onClick={() => navigate(`/courses/${course.id}`)}
               >
                 View Course →
               </button>

@@ -1,68 +1,74 @@
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase";
 import { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { db } from "../firebase";
+import styles from "./Courses.module.css";
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourses = async () => {
-      const querySnapshot = await getDocs(collection(db, "courses"));
-      const list = querySnapshot.docs.map((doc) => ({
+      const snapshot = await getDocs(collection(db, "courses"));
+      const list = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
       }));
       setCourses(list);
+      setLoading(false);
     };
 
     fetchCourses();
   }, []);
 
+  if (loading) {
+    return <h2 style={{ padding: "80px", textAlign: "center" }}>Loading courses...</h2>;
+  }
+
   return (
-    <div style={{ padding: "60px 8%" }}>
-      <h1 style={{ marginBottom: "30px" }}>Explore Courses</h1>
+    <section className={styles.page}>
+      <div className={styles.header}>
+        <h1>Explore Our Courses</h1>
+        <p>Industry-focused courses updated in real-time</p>
+      </div>
 
-      {/* 🔥 NO TECH / NON-TECH SECTIONS */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-          gap: "30px",
-        }}
-      >
-        {courses.map((course) => (
-          <div
+      <div className={styles.grid}>
+        {courses.map((course, index) => (
+          <motion.div
             key={course.id}
-            style={{
-              borderRadius: "16px",
-              overflow: "hidden",
-              boxShadow: "0 12px 30px rgba(0,0,0,0.08)",
-              cursor: "pointer",
-            }}
-            onClick={() => navigate(`/courses/${course.id}`)}
+            className={styles.card}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            viewport={{ once: true }}
           >
-            <img
-              src={course.image}
-              alt={course.title}
-              style={{ width: "100%", height: "180px", objectFit: "cover" }}
-            />
-
-            <div style={{ padding: "16px" }}>
-              <h3>{course.title}</h3>
-              <p style={{ color: "#64748b", fontSize: "0.9rem" }}>
-                {course.caption || course.description}
-              </p>
-
-              <p style={{ marginTop: "8px", fontSize: "0.85rem" }}>
-                ⭐ {course.rating} | ⏱ {course.duration}
-              </p>
+            <div className={styles.imageBox}>
+              <img src={course.image} alt={course.title} />
+              <span className={styles.level}>{course.level}</span>
             </div>
-          </div>
+
+            <div className={styles.content}>
+              <h3>{course.title}</h3>
+              <p>{course.caption}</p>
+              <p>Rating ⭐{course.rating}</p>
+              {/* <p>{course.description}</p> */}
+
+              <span className={styles.meta}>⏱ {course.duration}</span>
+
+              <button
+                className={styles.btn}
+                onClick={() => navigate(`/courses/${course.id}`)}
+              >
+                View Course →
+              </button>
+            </div>
+          </motion.div>
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 

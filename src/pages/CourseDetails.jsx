@@ -1,135 +1,133 @@
 import { useParams } from "react-router-dom";
-import coursesData from "../data/coursesData";
+import { doc, getDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { db } from "../firebase";
 
 const CourseDetails = () => {
   const { id } = useParams();
+  const [course, setCourse] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const course = coursesData.find((c) => String(c.id) === String(id));
+  useEffect(() => {
+    const fetchCourse = async () => {
+      const docRef = doc(db, "courses", id);
+      const snap = await getDoc(docRef);
 
-  if (!course) {
-    return (
-      <h2 style={{ padding: "80px", textAlign: "center" }}>Course not found</h2>
-    );
+      if (snap.exists()) {
+        setCourse(snap.data());
+      }
+      setLoading(false);
+    };
+
+    fetchCourse();
+  }, [id]);
+
+  if (loading) {
+    return <h2 style={{ padding: "80px" }}>Loading...</h2>;
   }
 
-  return (
-    <div style={{ padding: "60px 8%" }}>
-      <h1>{course.title}</h1>
-      <p>{course.subtitle}</p>
+  if (!course) {
+    return <h2 style={{ padding: "80px" }}>Course not found</h2>;
+  }
 
+  // 🔥 VIDEO / PLAYLIST LOGIC
+  const videoSrc =
+    course.youtubePlaylist ||
+    (course.youtubeLink
+      ? course.youtubeLink.replace("watch?v=", "embed/")
+      : null);
+
+  return (
+    <div style={{ padding: "60px 8%", maxWidth: "1200px", margin: "auto" }}>
+      {/* TOP SECTION */}
       <div style={{ display: "flex", gap: "40px", flexWrap: "wrap" }}>
         <img
           src={course.image}
           alt={course.title}
           style={{
-            width: "100%",
-            maxWidth: "600px",
-            borderRadius: "14px",
+            width: "420px",
+            height: "260px",
+            objectFit: "cover",
+            borderRadius: "18px",
           }}
         />
 
-        <div style={{ flex: 1 }}>
-          <p style={{ marginBottom: "16px", fontSize: "1rem" }}>
-            ⭐ {course.rating} &nbsp; | &nbsp; ⏱ {course.duration} &nbsp; |
-            &nbsp; 📘 {course.level}
+        <div>
+          <h1>{course.title}</h1>
+          <p>{course.caption}</p>
+
+          <p style={{ marginTop: "10px" }}>
+            ⭐ {course.rating} | ⏱ {course.duration} | 📘 {course.level}
           </p>
 
-          <p style={{ color: "#64748b", lineHeight: "1.7" }}>
-            {course.description}
-          </p>
-
-          <button
-            style={{
-              marginTop: "24px",
-              padding: "14px 28px",
-              background: "#2563eb",
-              color: "#fff",
-              border: "none",
-              borderRadius: "10px",
-              cursor: "pointer",
-              fontSize: "1rem",
-            }}
-          >
-            Enroll Now
-          </button>
+          <p style={{ marginTop: "14px" }}>{course.description}</p>
         </div>
       </div>
-      <h1 style={{ textAlign: "center", marginTop: "50px" }}>
-        🔍 What This Course Covers
-      </h1>
-      <p style={{ color: "#64748b", lineHeight: "1.7" }}>
-        {course.courseCovers}
-      </p>
 
-      
-      <h1 style={{ textAlign: "center", marginTop: "50px" }}>
-        📊 Model Building & Evaluation
-      </h1>
-      <p style={{ color: "#64748b", lineHeight: "1.7" }}>
-        {course.modelBuilding}
-      </p>
-
-      <h2 style={{ marginTop: "50px" }}>Why Learn </h2>
-      <ul style={{ marginTop: "16px", lineHeight: "1.8" }}>
-        {course.whyLearn?.map((item, index) => (
-          <li key={index}>{item}</li>
-        ))}
-      </ul>
-
-      <h2 style={{ marginTop: "50px" }}>Skills You Gain </h2>
-      <ul style={{ marginTop: "16px", lineHeight: "1.8" }}>
-        {course.skillsYouGain?.map((item, index) => (
-          <li key={index}>{item}</li>
-        ))}
-      </ul>
-
-      <h2 style={{ marginTop: "50px" }}>Technologies </h2>
-      <ul style={{ marginTop: "16px", lineHeight: "1.8" }}>
-        {course.technologies?.map((item, index) => (
-          <li key={index}>{item}</li>
-        ))}
-      </ul>
-
-      {(course.youtubePlaylist || course.youtube) && (
+      {/* VIDEO */}
+          <h2 style={{ marginTop: "40px" }}>Course Preview</h2>
+      {videoSrc && (
         <>
-          <h2 style={{ marginTop: "50px" }}>Course Preview</h2>
-
           <iframe
+            src={videoSrc}
             width="100%"
             height="420"
-            src={course.youtubePlaylist || course.youtube}
-            title="Course Preview"
-            frameBorder="0"
+            style={{ borderRadius: "14px", marginTop: "20px" }}
             allowFullScreen
-            style={{
-              marginTop: "20px",
-              borderRadius: "14px",
-            }}
-          ></iframe>
-          <h2 style={{ marginTop: "50px" }}>✅ Learning Outcomes</h2>
-          <ul style={{ marginTop: "16px", lineHeight: "1.8" }}>
-            {course.LearningOutcomes?.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
+            title="Course Video"
+          />
         </>
       )}
 
-      <ol style={{ marginTop: "16px", lineHeight: "1.8" }}>
-        {course.curriculum?.map((item, index) => (
-          <li key={index}>{item}</li>
-        ))}
-      </ol>
-      <h2 style={{ marginTop: "50px" }}>Projects </h2>
-      <ul style={{ marginTop: "16px", lineHeight: "1.8" }}>
-        {course.projects?.map((item, index) => (
-          <li key={index}>{item}</li>
+      {/* WHY LEARN */}
+      <h2 style={{ marginTop: "40px" }}>Why Learn This Course?</h2>
+      <ul>
+        {course.whyLearn?.map((item, i) => (
+          <li key={i}>{item}</li>
         ))}
       </ul>
-      <h2 style={{ marginTop: "50px" }}>Career Roles </h2>
-      <ul style={{ marginTop: "16px", lineHeight: "1.8" }}>
-        {course.careerRoles?.map((item, index) => (
-          <li key={index}>{item}</li>
+
+      {/* COURSE COVERS */}
+      <h2 style={{ marginTop: "40px" }}>What This Course Covers</h2>
+      <p>{course.courseCovers}</p>
+
+      {/* SKILLS */}
+      <h2 style={{ marginTop: "40px" }}>Skills You Gain</h2>
+      <ul>
+        {course.skillsYouGain?.map((item, i) => (
+          <li key={i}>{item}</li>
+        ))}
+      </ul>
+
+      {/* TECHNOLOGIES */}
+      <h2 style={{ marginTop: "40px" }}>Technologies</h2>
+      <ul>
+        {course.technologies?.map((item, i) => (
+          <li key={i}>{item}</li>
+        ))}
+      </ul>
+
+      {/* CURRICULUM */}
+      {/* <h2 style={{ marginTop: "40px" }}>Curriculum</h2>
+      <ol>
+        {course.curriculum?.map((item, i) => (
+          <li key={i}>{item}</li>
+        ))}
+      </ol> */}
+
+      {/* PROJECTS */}
+      <h2 style={{ marginTop: "40px" }}>Projects</h2>
+      <ul>
+        {course.projects?.map((item, i) => (
+          <li key={i}>{item}</li>
+        ))}
+      </ul>
+
+      {/* CAREER ROLES */}
+      <h2 style={{ marginTop: "40px" }}>Career Roles</h2>
+      <ul>
+        {course.careerRoles?.map((item, i) => (
+          <li key={i}>{item}</li>
         ))}
       </ul>
     </div>

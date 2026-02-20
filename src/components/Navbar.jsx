@@ -1,109 +1,81 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-// import { FaSearch } from "react-icons/fa";
-import styles from "./Navbar.module.css";
+import { FaSearch } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
-import { FaBars, FaTimes } from "react-icons/fa";
+import styles from "./Navbar.module.css";
 
-
-const Navbar = ({ openLogin }) => {
-  // const [search, setSearch] = useState("");
+const Navbar = () => {
+  const [search, setSearch] = useState("");
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const { user, login, logout } = useAuth();
 
+  const handleSearch = () => {
+    if (!search.trim()) return;
+    navigate(`/search?q=${search}`);
+    setSearch("");
+  };
 
-  // const handleSearch = () => {
-  //   if (!search.trim()) return;
-  //   navigate(`/search?q=${search}`);
-  //   setSearch("");
-  // };
+  const handleLogin = async () => {
+    await login();
+    navigate("/profile");
+  };
 
   return (
-    <nav className={styles.navbar}>
-      {/* LEFT */}
-<div className={styles.left}>
-  <div
-    className={styles.logo}
-    onClick={() => navigate("/")}
-  >
-    📘 <span>SKILL-UP</span>
-  </div>
+    <header className={styles.header}>
+      <nav className={styles.nav}>
+        {/* LOGO */}
+        <div className={styles.logo} onClick={() => navigate("/")}>
+          📘 <span>Skill-Up</span>
+        </div>
 
-  {/* MENU BUTTON (MOBILE) */}
-  <button
-    className={styles.menuBtn}
-    onClick={() => setMenuOpen(!menuOpen)}
-  >
-    {menuOpen ? <FaTimes /> : <FaBars />}
-  </button>
+        {/* LINKS */}
+        <ul className={styles.links}>
+          <li>
+            <NavLink to="/" className={({ isActive }) => isActive ? styles.active : ""}>
+              Home
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/courses" className={({ isActive }) => isActive ? styles.active : ""}>
+              Courses
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/about" className={({ isActive }) => isActive ? styles.active : ""}>
+              About
+            </NavLink>
+          </li>
+        </ul>
 
-  {/* LINKS → MENU BUTTON KE ANDAR */}
-  <ul className={`${styles.links} ${menuOpen ? styles.active : ""}`}>
-    <li onClick={() => setMenuOpen(false)}>
-      <NavLink to="/" end>Home</NavLink>
-    </li>
-    <li onClick={() => setMenuOpen(false)}>
-      <NavLink to="/courses">Courses</NavLink>
-    </li>
-    <li onClick={() => setMenuOpen(false)}>
-      <NavLink to="/about">About</NavLink>
-    </li>
-  </ul>
-</div>
-      {/* SEARCH */}
-      {/* <div className={styles.searchBox}>
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-          placeholder="Search skills..."
-        />
-        <button onClick={handleSearch} className={styles.searchBtn}>
-          <FaSearch />
-        </button>
-      </div>
- */}
-      {/* RIGHT */}
-      <div className={styles.right}>
-        {!user ? (
-          <>
-            <button className={styles.signin} onClick={openLogin}>
-              Sign in
-            </button>
-            <button className={styles.signup} onClick={openLogin}>
-              Sign up
-            </button>
-          </>
-        ) : (
-          <div className={styles.userBox}>
-            <img
-              src={
-                user.photoURL ||
-                "https://ui-avatars.com/api/?name=User&background=2563eb&color=fff"
-              }
-              alt={user.displayName}
-              className={styles.avatar}
-              onClick={() => navigate("/profile")}
-              style={{ cursor: "pointer" }}
+        {/* RIGHT SIDE */}
+        <div className={styles.right}>
+          <div className={styles.searchBox}>
+            <input
+              placeholder="Search courses..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             />
-
-            {/* ❌ NEVER render {user} */}
-            <span
-              className={styles.userName}
-              onClick={() => navigate("/profile")}
-              style={{ cursor: "pointer" }}
-            >
-              {user.displayName}
-            </span>
-
-            <button onClick={logout} className={styles.logout}>
-              Logout
+            <button onClick={handleSearch}>
+              <FaSearch />
             </button>
           </div>
-        )}
-      </div>
-    </nav>
+
+          {!user ? (
+            <button className={styles.cta} onClick={handleLogin}>
+              Sign In
+            </button>
+          ) : (
+            <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+              <span>{user.displayName}</span>
+              <button onClick={logout} className={styles.cta}>
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
+      </nav>
+    </header>
   );
 };
 
