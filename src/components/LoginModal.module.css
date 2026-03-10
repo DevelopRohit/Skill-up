@@ -1,154 +1,118 @@
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(8px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-  animation: fadeIn 0.3s ease-in-out;
+/* OVERLAY */
+.overlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:linear-gradient(
+135deg,
+rgba(37,99,235,0.8),
+rgba(124,58,237,0.8)
+);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:9999;
+backdrop-filter:blur(5px);
 }
 
-.modal {
-  background: linear-gradient(135deg, #ffffff, #f8fafc);
-  padding: 40px;
-  width: 400px;
-  border-radius: 20px;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
-  text-align: center;
-  position: relative;
-  animation: slideUp 0.4s ease-out;
+/* MODAL */
+.modal{
+width:380px;
+padding:40px;
+border-radius:20px;
+background:rgba(255,255,255,0.15);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,0.2);
+text-align:center;
+color:white;
+box-shadow:0 25px 60px rgba(0,0,0,0.3);
+animation:popup 0.35s ease;
+position:relative;
 }
 
-.modal h2 {
-  margin-bottom: 5px;
-  font-size: 22px;
+/* ANIMATION */
+@keyframes popup{
+from{
+opacity:0;
+transform:scale(0.8);
+}
+to{
+opacity:1;
+transform:scale(1);
+}
 }
 
-.modal p {
-  font-size: 14px;
-  color: #64748b;
-  margin-bottom: 20px;
+/* CLOSE BUTTON */
+.close{
+position:absolute;
+top:12px;
+right:14px;
+border:none;
+background:none;
+font-size:22px;
+color:white;
+cursor:pointer;
 }
 
-.input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 12px;
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
-  outline: none;
-  transition: 0.3s;
+/* HEADER */
+.header h2{
+font-size:26px;
+margin-bottom:8px;
 }
 
-.input:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+.header p{
+font-size:14px;
+opacity:0.9;
+margin-bottom:25px;
 }
 
-.options {
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-  margin-bottom: 15px;
+/* GOOGLE BUTTON */
+.googleBtn{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:12px;
+width:100%;
+padding:14px;
+border-radius:10px;
+border:none;
+background:white;
+color:#1f2937;
+font-weight:600;
+cursor:pointer;
+transition:all 0.3s ease;
 }
 
-.loginBtn {
-  width: 100%;
-  padding: 12px;
-  background: linear-gradient(90deg, #2563eb, #3b82f6);
-  border: none;
-  border-radius: 10px;
-  color: #fff;
-  font-weight: 500;
-  cursor: pointer;
-  transition: 0.3s;
+.googleBtn img{
+width:20px;
 }
 
-.loginBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+.googleBtn:hover{
+transform:translateY(-2px);
+box-shadow:0 12px 30px rgba(0,0,0,0.3);
 }
 
-.divider {
-  margin: 18px 0;
-  position: relative;
-  font-size: 12px;
-  color: #94a3b8;
+/* FOOTER */
+.footer{
+margin-top:20px;
+font-size:12px;
+opacity:0.8;
 }
 
-.divider span {
-  background: #fff;
-  padding: 0 10px;
+.footer span{
+display:block;
+font-weight:600;
+margin-top:4px;
 }
 
-.divider::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: #e2e8f0;
-  z-index: -1;
+/* MOBILE */
+@media(max-width:500px){
+
+.modal{
+width:90%;
+padding:30px;
 }
 
-.googleBtn {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
-  background: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  color: black;
-  cursor: pointer;
-  transition: 0.3s;
 }
-
-.googleBtn:hover {
-  border-color: #2563eb;
-  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
-}
-
-.signupText {
-  margin-top: 15px;
-  font-size: 13px;
-}
-
-.link {
-  color: #2563eb;
-  cursor: pointer;
-}
-
-.closeBtn {
-  position: absolute;
-  top: 15px;
-  right: 18px;
-  background: transparent;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.closeBtn:hover {
-  color: #ef4444;
-}
-
-/* Animations */
-@keyframes slideUp {
-  from { transform: translateY(40px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-<<<<<<< HEAD
-}
-=======
-}
->>>>>>> 58e38f1b2bac92770d02e7d4c38ae1d5e6e663b6

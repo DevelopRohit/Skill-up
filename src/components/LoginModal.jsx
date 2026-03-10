@@ -1,7 +1,5 @@
-import { useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
-import { FcGoogle } from "react-icons/fc";
 import styles from "./LoginModal.module.css";
+import { useAuth } from "../context/AuthContext";
 
 const LoginModal = ({ close }) => {
   const { login } = useAuth();
@@ -11,73 +9,37 @@ const LoginModal = ({ close }) => {
     close();
   };
 
-  // ESC key se close
-  useEffect(() => {
-    const handleEsc = (e) => {
-      if (e.key === "Escape") close();
-    };
-    window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
-  }, [close]);
-
   return (
-    <div className={styles.overlay} onClick={close}>
-      <div
-        className={styles.modal}
-        onClick={(e) => e.stopPropagation()} // prevent outside click inside modal
-      >
-        <button className={styles.closeBtn} onClick={close}>
+    <div className={styles.overlay}>
+
+      <div className={styles.modal}>
+
+        <button className={styles.close} onClick={close}>
           ✕
         </button>
 
-        <h2>Welcome Back 👋</h2>
-        <p>Sign in to continue learning</p>
-
-        {/* Email Input (UI only) */}
-        <input
-          type="email"
-          placeholder="Email address"
-          className={styles.input}
-        />
-
-        {/* Password Input (UI only) */}
-        <input
-          type="password"
-          placeholder="Password"
-          className={styles.input}
-        />
-
-        <div className={styles.options}>
-          <label>
-            <input type="checkbox" />
-            Remember me
-          </label>
-          <span className={styles.link}>Forgot Password?</span>
-        </div>
-
-        <button className={styles.loginBtn}>
-          Login
-        </button>
-
-        <div className={styles.divider}>
-          <span>OR</span>
+        <div className={styles.header}>
+          <h2>Welcome to Skill-Up</h2>
+          <p>Learn modern tech skills and grow your career 🚀</p>
         </div>
 
         <button className={styles.googleBtn} onClick={handleGoogleLogin}>
-          <FcGoogle size={20} />
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/281/281764.png"
+            alt="google"
+          />
           Continue with Google
         </button>
 
-        <p className={styles.signupText}>
-          Don’t have an account? <span className={styles.link}>Sign Up</span>
-        </p>
+        <div className={styles.footer}>
+          <p>By continuing you agree to our</p>
+          <span>Terms & Privacy Policy</span>
+        </div>
+
       </div>
+
     </div>
   );
 };
 
-<<<<<<< HEAD
 export default LoginModal;
-=======
-export default LoginModal;
->>>>>>> 58e38f1b2bac92770d02e7d4c38ae1d5e6e663b6

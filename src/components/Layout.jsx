@@ -1,12 +1,25 @@
+import { useState } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import LoginModal from "./LoginModal";
 
 const Layout = ({ children }) => {
-  return (
+
+  const [showLogin,setShowLogin]=useState(false);
+
+  return(
     <>
-      <Navbar />
-      {children}
-      <Footer />
+    
+    <Navbar openLogin={()=>setShowLogin(true)} />
+
+    {children}
+
+    <Footer/>
+
+    {showLogin && (
+      <LoginModal close={()=>setShowLogin(false)} />
+    )}
+
     </>
   );
 };

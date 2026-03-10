@@ -4,47 +4,41 @@ import { FaSearch } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
 import styles from "./Navbar.module.css";
 
-const Navbar = () => {
+const Navbar = ({ openLogin }) => {
   const [search, setSearch] = useState("");
   const [showProfile, setShowProfile] = useState(false);
 
   const navigate = useNavigate();
-  const { user, login, logout } = useAuth();
+  const { user, logout } = useAuth();
+
   const profileRef = useRef(null);
 
   const handleSearch = () => {
-    const trimmed = search.trim();
-    if (!trimmed) return;
-    navigate(`/search?q=${encodeURIComponent(trimmed)}`);
+    if (!search.trim()) return;
+
+    navigate(`/search?q=${search}`);
     setSearch("");
   };
 
-  // Close profile dropdown on outside click
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (profileRef.current && !profileRef.current.contains(event.target)) {
+    const handler = (e) => {
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
         setShowProfile(false);
       }
     };
 
-    if (showProfile) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
+    document.addEventListener("mousedown", handler);
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showProfile]);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   return (
     <header className={styles.header}>
       <nav className={styles.nav}>
-        {/* LOGO */}
         <div className={styles.logo} onClick={() => navigate("/")}>
           📘 <span>Skill-Up</span>
         </div>
 
-        {/* LINKS */}
         <ul className={styles.links}>
           <li>
             <NavLink to="/">Home</NavLink>
@@ -58,49 +52,40 @@ const Navbar = () => {
         </ul>
 
         <div className={styles.right}>
-          {/* SEARCH */}
           <div className={styles.searchBox}>
             <input
-              placeholder="Search..."
+              placeholder="Search courses..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             />
+
             <button onClick={handleSearch}>
               <FaSearch />
             </button>
           </div>
 
-          {/* LOGIN BUTTON */}
+          {/* SIGN BUTTON */}
+
           {!user && (
-            <button className={styles.cta} onClick={login}>
+            <button className={styles.cta} onClick={openLogin}>
               Sign In
             </button>
           )}
 
-          {/* PROFILE ICON */}
+          {/* PROFILE */}
+
           {user && (
             <div className={styles.profileWrapper} ref={profileRef}>
               <img
-                src={
-                  user.photoURL ||
-                  `https://ui-avatars.com/api/?name=${user.displayName}&background=2563eb&color=fff`
-                }
-                alt="profile"
+                src={user.photoURL}
                 className={styles.profileIcon}
-                onClick={() => setShowProfile((prev) => !prev)}
+                onClick={() => setShowProfile(!showProfile)}
               />
 
               {showProfile && (
                 <div className={styles.profileDropdown}>
-                  <img
-                    src={
-                      user.photoURL ||
-                      `https://ui-avatars.com/api/?name=${user.displayName}&background=2563eb&color=fff&size=256`
-                    }
-                    alt="profile"
-                    className={styles.profileLarge}
-                  />
+                  <img src={user.photoURL} className={styles.profileLarge} />
 
                   <h4>{user.displayName}</h4>
                   <p>{user.email}</p>
