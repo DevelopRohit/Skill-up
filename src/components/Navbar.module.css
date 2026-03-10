@@ -25,7 +25,7 @@
 
 .logo span {
   background: linear-gradient(135deg, #2563eb, #7c3aed);
-  -webkit-background-clip: text;
+ -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -217,8 +217,5 @@
     opacity: 1;
     transform: translateY(0);
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 58e38f1b2bac92770d02e7d4c38ae1d5e6e663b6
+
