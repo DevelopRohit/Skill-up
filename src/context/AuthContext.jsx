@@ -1,34 +1,45 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
-import { auth, provider } from "../firebase";
+import { auth } from "../firebase";
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged,
+} from "firebase/auth";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
 
+  const provider = new GoogleAuthProvider();
+
+  // LOGIN FUNCTION
   const login = async () => {
-    const result = await signInWithPopup(auth, provider);
-    setUser(result.user);
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
+  // LOGOUT FUNCTION
   const logout = async () => {
     await signOut(auth);
-    setUser(null);
   };
 
+  // CHECK AUTH STATE
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      setLoading(false);
     });
+
     return () => unsubscribe();
   }, []);
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };

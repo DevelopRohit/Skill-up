@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
@@ -6,19 +6,35 @@ import styles from "./Navbar.module.css";
 
 const Navbar = () => {
   const [search, setSearch] = useState("");
+  const [showProfile, setShowProfile] = useState(false);
+
   const navigate = useNavigate();
   const { user, login, logout } = useAuth();
+  const profileRef = useRef(null);
 
   const handleSearch = () => {
-    if (!search.trim()) return;
-    navigate(`/search?q=${search}`);
+    const trimmed = search.trim();
+    if (!trimmed) return;
+    navigate(`/search?q=${encodeURIComponent(trimmed)}`);
     setSearch("");
   };
 
-  const handleLogin = async () => {
-    await login();
-    navigate("/profile");
-  };
+  // ✅ Outside click close FIXED
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setShowProfile(false);
+      }
+    };
+
+    if (showProfile) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showProfile]);
 
   return (
     <header className={styles.header}>
@@ -31,27 +47,21 @@ const Navbar = () => {
         {/* LINKS */}
         <ul className={styles.links}>
           <li>
-            <NavLink to="/" className={({ isActive }) => isActive ? styles.active : ""}>
-              Home
-            </NavLink>
+            <NavLink to="/">Home</NavLink>
           </li>
           <li>
-            <NavLink to="/courses" className={({ isActive }) => isActive ? styles.active : ""}>
-              Courses
-            </NavLink>
+            <NavLink to="/courses">Courses</NavLink>
           </li>
           <li>
-            <NavLink to="/about" className={({ isActive }) => isActive ? styles.active : ""}>
-              About
-            </NavLink>
+            <NavLink to="/about">About</NavLink>
           </li>
         </ul>
 
-        {/* RIGHT SIDE */}
         <div className={styles.right}>
+          {/* SEARCH */}
           <div className={styles.searchBox}>
             <input
-              placeholder="Search courses..."
+              placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -61,16 +71,45 @@ const Navbar = () => {
             </button>
           </div>
 
-          {!user ? (
-            <button className={styles.cta} onClick={handleLogin}>
+          {/* LOGIN BUTTON */}
+          {!user && (
+            <button className={styles.cta} onClick={login}>
               Sign In
             </button>
-          ) : (
-            <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-              <span>{user.displayName}</span>
-              <button onClick={logout} className={styles.cta}>
-                Logout
-              </button>
+          )}
+
+          {/* PROFILE ICON */}
+          {user && (
+            <div className={styles.profileWrapper} ref={profileRef}>
+              <img
+                src={
+                  user.photoURL ||
+                  `https://ui-avatars.com/api/?name=${user.displayName}&background=2563eb&color=fff`
+                }
+                alt="profile"
+                className={styles.profileIcon}
+                onClick={() => setShowProfile((prev) => !prev)}
+              />
+
+              {/* ✅ DROPDOWN RENDER FIX */}
+              {showProfile && (
+                <div className={styles.profileDropdown}>
+                  <img
+                    src={
+                      user.photoURL ||
+                      `https://ui-avatars.com/api/?name=${user.displayName}&background=2563eb&color=fff&size=256`
+                    }
+                    alt="profile"
+                    className={styles.profileLarge}
+                  />
+                  <h4>{user.displayName}</h4>
+                  <p>{user.email}</p>
+
+                  <button onClick={logout} className={styles.logoutBtn}>
+                    Logout
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>

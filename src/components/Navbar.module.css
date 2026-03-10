@@ -78,27 +78,47 @@
 .searchBox {
   display: flex;
   align-items: center;
-  background: #f1f5f9;
-  padding: 6px 10px;
-  border-radius: 999px;
+  background: #ffffff;
+  border-radius: 50px;
+  padding: 5px;
+  width: 260px;
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+}
+
+.searchBox:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
 .searchBox input {
   border: none;
-  background: transparent;
   outline: none;
-  padding: 6px;
-  width: 140px;
+  padding: 8px 12px;
+  flex: 1;
+  border-radius: 50px;
+  font-size: 14px;
+  background: transparent;
 }
 
 .searchBox button {
   border: none;
-  background: none;
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  color: white;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
-  color: #475569;
+  transition: all 0.3s ease;
 }
 
-/* CTA */
+.searchBox button:hover {
+  transform: scale(1.08);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+}/* CTA */
 .cta {
   padding: 10px 18px;
   background: linear-gradient(135deg, #2563eb, #7c3aed);
@@ -123,5 +143,78 @@
 
   .searchBox input {
     width: 90px;
+  }
+}
+.profileWrapper {
+  position: relative;
+}
+
+.profileIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #2563eb;
+  transition: 0.3s;
+}
+
+.profileIcon:hover {
+  transform: scale(1.05);
+}
+
+.profileDropdown {
+  position: absolute;
+  right: 0;
+  top: 55px;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 15px;
+  width: 220px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+  text-align: center;
+  animation: dropdown 0.25s ease;
+  z-index: 9999;   /* 🔥 IMPORTANT FIX */
+}
+
+.profileLarge {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.profileDropdown h4 {
+  margin: 5px 0;
+}
+
+.profileDropdown p {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 15px;
+  word-break: break-all;
+}
+
+.logoutBtn {
+  width: 100%;
+  padding: 8px;
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.logoutBtn:hover {
+  background: #dc2626;
+}
+
+@keyframes dropdown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

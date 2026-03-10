@@ -13,11 +13,11 @@ const Profile = () => {
   }
 
   // 🔥 EMAIL SAFE FETCH
-const email =
-  user?.email ??
-  user?.providerData?.find(p => p.email)?.email ??
-  "Email not available";
-  
+  const email =
+    user?.email ??
+    user?.providerData?.find((p) => p.email)?.email ??
+    "Email not available";
+
   return (
     <div className={styles.profilePage}>
       <div className={styles.card}>

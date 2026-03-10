@@ -65,7 +65,7 @@ const CourseDetails = () => {
       </div>
 
       {/* VIDEO */}
-          <h2 style={{ marginTop: "40px" }}>Course Preview</h2>
+      <h2 style={{ marginTop: "40px" }}>Course Preview</h2>
       {videoSrc && (
         <>
           <iframe

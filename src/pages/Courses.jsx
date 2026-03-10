@@ -13,7 +13,7 @@ const Courses = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       const snapshot = await getDocs(collection(db, "courses"));
-      const list = snapshot.docs.map(doc => ({
+      const list = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
@@ -25,7 +25,11 @@ const Courses = () => {
   }, []);
 
   if (loading) {
-    return <h2 style={{ padding: "80px", textAlign: "center" }}>Loading courses...</h2>;
+    return (
+      <h2 style={{ padding: "80px", textAlign: "center" }}>
+        Loading courses...
+      </h2>
+    );
   }
 
   return (
