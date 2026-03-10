@@ -76,4 +76,8 @@ const LoginModal = ({ close }) => {
   );
 };
 
+<<<<<<< HEAD
 export default LoginModal;
+=======
+export default LoginModal;
+>>>>>>> 58e38f1b2bac92770d02e7d4c38ae1d5e6e663b6

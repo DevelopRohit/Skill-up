@@ -19,7 +19,11 @@ const SearchResults = () => {
         const snapshot = await getDocs(collection(db, "courses"));
         const list = snapshot.docs.map((doc) => ({
           id: doc.id,
+<<<<<<< HEAD
           ...doc.data(),
+=======
+          ...doc.data()
+>>>>>>> 58e38f1b2bac92770d02e7d4c38ae1d5e6e663b6
         }));
         setCourses(list);
       } catch (error) {
@@ -58,7 +62,11 @@ const SearchResults = () => {
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))",
             gap: "24px",
+<<<<<<< HEAD
             marginTop: "30px",
+=======
+            marginTop: "30px"
+>>>>>>> 58e38f1b2bac92770d02e7d4c38ae1d5e6e663b6
           }}
         >
           {filteredCourses.map((course) => (
@@ -68,7 +76,11 @@ const SearchResults = () => {
                 background: "#fff",
                 borderRadius: "14px",
                 padding: "16px",
+<<<<<<< HEAD
                 boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
+=======
+                boxShadow: "0 10px 30px rgba(0,0,0,0.08)"
+>>>>>>> 58e38f1b2bac92770d02e7d4c38ae1d5e6e663b6
               }}
             >
               <img
@@ -78,11 +90,21 @@ const SearchResults = () => {
                   width: "100%",
                   height: "160px",
                   objectFit: "cover",
+<<<<<<< HEAD
                   borderRadius: "10px",
                 }}
               />
 
               <h3 style={{ margin: "12px 0 6px" }}>{course.title}</h3>
+=======
+                  borderRadius: "10px"
+                }}
+              />
+
+              <h3 style={{ margin: "12px 0 6px" }}>
+                {course.title}
+              </h3>
+>>>>>>> 58e38f1b2bac92770d02e7d4c38ae1d5e6e663b6
 
               <p style={{ fontSize: "0.9rem", color: "#64748b" }}>
                 {course.description?.slice(0, 100)}...
@@ -98,7 +120,11 @@ const SearchResults = () => {
                   color: "#fff",
                   border: "none",
                   borderRadius: "10px",
+<<<<<<< HEAD
                   cursor: "pointer",
+=======
+                  cursor: "pointer"
+>>>>>>> 58e38f1b2bac92770d02e7d4c38ae1d5e6e663b6
                 }}
               >
                 View Course

@@ -22,7 +22,14 @@ const Navbar = () => {
   // ✅ Outside click close FIXED
   useEffect(() => {
     const handleClickOutside = (event) => {
+<<<<<<< HEAD
       if (profileRef.current && !profileRef.current.contains(event.target)) {
+=======
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(event.target)
+      ) {
+>>>>>>> 58e38f1b2bac92770d02e7d4c38ae1d5e6e663b6
         setShowProfile(false);
       }
     };
@@ -46,6 +53,7 @@ const Navbar = () => {
 
         {/* LINKS */}
         <ul className={styles.links}>
+<<<<<<< HEAD
           <li>
             <NavLink to="/">Home</NavLink>
           </li>
@@ -55,6 +63,11 @@ const Navbar = () => {
           <li>
             <NavLink to="/about">About</NavLink>
           </li>
+=======
+          <li><NavLink to="/">Home</NavLink></li>
+          <li><NavLink to="/courses">Courses</NavLink></li>
+          <li><NavLink to="/about">About</NavLink></li>
+>>>>>>> 58e38f1b2bac92770d02e7d4c38ae1d5e6e663b6
         </ul>
 
         <div className={styles.right}>
@@ -80,7 +93,14 @@ const Navbar = () => {
 
           {/* PROFILE ICON */}
           {user && (
+<<<<<<< HEAD
             <div className={styles.profileWrapper} ref={profileRef}>
+=======
+            <div
+              className={styles.profileWrapper}
+              ref={profileRef}
+            >
+>>>>>>> 58e38f1b2bac92770d02e7d4c38ae1d5e6e663b6
               <img
                 src={
                   user.photoURL ||
@@ -88,7 +108,13 @@ const Navbar = () => {
                 }
                 alt="profile"
                 className={styles.profileIcon}
+<<<<<<< HEAD
                 onClick={() => setShowProfile((prev) => !prev)}
+=======
+                onClick={() =>
+                  setShowProfile((prev) => !prev)
+                }
+>>>>>>> 58e38f1b2bac92770d02e7d4c38ae1d5e6e663b6
               />
 
               {/* ✅ DROPDOWN RENDER FIX */}
@@ -105,7 +131,14 @@ const Navbar = () => {
                   <h4>{user.displayName}</h4>
                   <p>{user.email}</p>
 
+<<<<<<< HEAD
                   <button onClick={logout} className={styles.logoutBtn}>
+=======
+                  <button
+                    onClick={logout}
+                    className={styles.logoutBtn}
+                  >
+>>>>>>> 58e38f1b2bac92770d02e7d4c38ae1d5e6e663b6
                     Logout
                   </button>
                 </div>
